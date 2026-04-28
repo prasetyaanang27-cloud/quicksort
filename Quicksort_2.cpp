@@ -1,86 +1,91 @@
-// QUICK SORT DENGAN PIVOT BERWARNA
-// Pivot akan tampil merah di terminal
+// QUICK SORT HARGA BARANG SEDERHANA
 
 #include <iostream>
 using namespace std;
 
-// Warna ANSI
-#define RESET   "\033[0m"
-#define RED     "\033[31m"
-
-// Menampilkan array dan pivot berwarna
-void tampilPivot(int arr[], int n, int pivotIndex)
-{
-    for (int i = 0; i < n; i++)
-    {
-        if (i == pivotIndex)
-            cout << RED << arr[i] << RESET << " ";
-        else
-            cout << arr[i] << " ";
+// Menampilkan array
+void tampil(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
     }
     cout << endl;
 }
 
-// Quick Sort
-void quickSort(int arr[], int low, int high, int n)
-{
-    int i = low;
-    int j = high;
+// Quick Sort Ascending
+void quickSortAsc(int arr[], int low, int high) {
+    int i = low, j = high;
+    int pivot = arr[(low + high) / 2];
 
-    int pivotIndex = (low + high) / 2;
-    int pivot = arr[pivotIndex];
+    while (i <= j) {
+        while (arr[i] < pivot) i++;
+        while (arr[j] > pivot) j--;
 
-    cout << "\nPivot dipilih: ";
-    tampilPivot(arr, n, pivotIndex);
-
-    while (i <= j)
-    {
-        while (arr[i] < pivot)
-            i++;
-
-        while (arr[j] > pivot)
-            j--;
-
-        if (i <= j)
-        {
+        if (i <= j) {
             swap(arr[i], arr[j]);
             i++;
             j--;
         }
     }
 
-    cout << "Setelah diproses: ";
-    tampilPivot(arr, n, pivotIndex);
-
     if (low < j)
-        quickSort(arr, low, j, n);
-
+        quickSortAsc(arr, low, j);
     if (i < high)
-        quickSort(arr, i, high, n);
+        quickSortAsc(arr, i, high);
 }
 
-int main()
-{
+// Quick Sort Descending
+void quickSortDesc(int arr[], int low, int high) {
+    int i = low, j = high;
+    int pivot = arr[(low + high) / 2];
+
+    while (i <= j) {
+        while (arr[i] > pivot) i++;
+        while (arr[j] < pivot) j--;
+
+        if (i <= j) {
+            swap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    }
+
+    if (low < j)
+        quickSortDesc(arr, low, j);
+    if (i < high)
+        quickSortDesc(arr, i, high);
+}
+
+int main() {
     int n;
 
-    cout << "Jumlah data: ";
+    cout << "Jumlah barang: ";
     cin >> n;
 
-    int arr[100];
+    int arr[100]; // maksimal 100 data
 
-    for (int i = 0; i < n; i++)
-    {
-        cout << "Masukkan harga ke-" << i + 1 << ": ";
+    for (int i = 0; i < n; i++) {
+        cout << "Harga barang ke-" << i + 1 << ": ";
         cin >> arr[i];
     }
 
-    cout << "\nData awal: ";
-    tampilPivot(arr, n, -1);
+    int pilih;
+    cout << "\n1. Ascending\n2. Descending\n";
+    cout << "Pilih: ";
+    cin >> pilih;
 
-    quickSort(arr, 0, n - 1, n);
-
-    cout << "\nHasil akhir sorting: ";
-    tampilPivot(arr, n, -1);
+    if (pilih == 1) {
+        quickSortAsc(arr, 0, n - 1);
+        cout << "\nHasil Ascending:\n";
+        tampil(arr, n);
+    }
+    else if (pilih == 2) {
+        quickSortDesc(arr, 0, n - 1);
+        cout << "\nHasil Descending:\n";
+        tampil(arr, n);
+    }
+    else {
+        cout << "Pilihan salah!";
+    }
 
     return 0;
 }
